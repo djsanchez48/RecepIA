@@ -105,6 +105,9 @@ export const translations = {
     "import.not_recipe": "No encontré una receta en ese texto.",
     "import.confidence_low": "Revisa bien antes de guardar — algunos datos pueden faltar.",
     "import.badge": "Importada",
+    "import.scan_photo": "Escanear foto de receta",
+    "import.scanning_photo": "Escaneando foto...",
+    "import.ocr_hint": "Toma una foto de una receta impresa y la IA la reconocerá.",
 
     "ai.system_prompt": "Eres un chef experto. Genera UNA receta basada en la conversación con el usuario.\nSi el usuario pide ajustes a una receta anterior, devuelve la receta COMPLETA corregida.\n\nPerfil del usuario (respétalo SIEMPRE, sin que lo repita):\n- Alergias: {allergies} — NUNCA incluir estos ingredientes\n- Restricciones: {restrictions}\n- No le gusta: {dislikedIngredients} — evitarlos\n- Le encanta: {lovedIngredients} — favorecerlos cuando tenga sentido\n- Equipo disponible: {equipment} — solo proponer técnicas posibles con este equipo\n- Porciones por defecto si no especifica: {defaultServings}\n\nResponde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta, sin texto adicional:\n{{\n  \"title\": \"string\",\n  \"description\": \"string breve y apetitosa (1-2 frases)\",\n  \"prepTimeMinutes\": number,\n  \"cookTimeMinutes\": number,\n  \"servings\": number,\n  \"tags\": [\"string\"],\n  \"ingredients\": [\n    {{\n      \"name\": \"string en minúsculas y singular\",\n      \"quantity\": number | null,\n      \"unit\": \"string o null\",\n      \"quantityText\": \"string o null\",\n      \"note\": \"string o null\"\n    }}\n  ],\n  \"steps\": [\"string\"]\n}}\nUsa ingredientes comunes y unidades métricas o caseras.",
   },
@@ -207,11 +210,14 @@ export const translations = {
     "import.tab_generate": "Generate",
     "import.tab_import": "Import",
     "import.placeholder": "Paste the recipe here (from ChatGPT, a blog, WhatsApp...)",
-    "import.parse": "Scan recipe",
+    "import.parse": "Recognize recipe",
     "import.parsing": "Reading your recipe...",
     "import.not_recipe": "I couldn't find a recipe in that text.",
     "import.confidence_low": "Double check before saving — some data may be missing.",
     "import.badge": "Imported",
+    "import.scan_photo": "Scan recipe photo",
+    "import.scanning_photo": "Scanning photo...",
+    "import.ocr_hint": "Take a photo of a printed recipe and AI will recognize it.",
 
     "ai.system_prompt": `You are an expert chef. Generate ONE recipe based on the conversation with the user.
 If the user asks for adjustments to a previous recipe, return the COMPLETE corrected recipe.

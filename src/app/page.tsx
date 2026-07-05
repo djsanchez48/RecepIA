@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, Loader2, SendHorizontal, FileText, AlertTriangle } from "lucide-react";
+import { Sparkles, Loader2, SendHorizontal, FileText, AlertTriangle, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RecipeCard } from "@/components/recipes/RecipeCard";
 import { CollectionSheet } from "@/components/recipes/CollectionSheet";
@@ -32,6 +32,7 @@ export default function Home() {
   const [importText, setImportText] = useState("");
   const [parseResult, setParseResult] = useState<ParsedRecipeResult | null>(null);
   const [source, setSource] = useState<"ai" | "imported">("ai");
+  const [ocrLoading, setOcrLoading] = useState(false);
 
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -106,6 +107,37 @@ export default function Home() {
     } finally { setLoading(false); }
   }
 
+  async function handleOCR(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(""); setParseResult(null); setOcrLoading(true); setRecipe(null);
+
+    try {
+      const reader = new FileReader();
+      const base64 = await new Promise<string>((resolve) => {
+        reader.onload = () => resolve((reader.result as string).split(",")[1]);
+        reader.readAsDataURL(file);
+      });
+
+      const res = await fetch("/api/ai/ocr-recipe", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: base64 }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error al escanear");
+
+      setParseResult(data);
+      if (data.isRecipe && data.recipe) {
+        setRecipe(data.recipe as GeneratedRecipe);
+        setSource("imported");
+        setDraftId(null);
+        setSaved(false);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al escanear");
+    } finally { setOcrLoading(false); }
+  }
+
   async function handleSave(collectionIds: string[]) {
     if (!recipe) return;
     setSaving(true);
@@ -176,9 +208,16 @@ export default function Home() {
             onKeyDown={(e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); handleImport(e); } }}
             placeholder={t("import.placeholder")}
             className="w-full min-h-36 rounded-xl border border-zinc-200 bg-white p-4 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:border-zinc-800 dark:bg-zinc-900 dark:placeholder:text-zinc-600" />
-          <Button type="submit" disabled={loading || !importText.trim()} className="w-full h-11">
-            {loading ? <><Loader2 className="h-4 w-4 animate-spin" />{t("import.parsing")}</> : <><FileText className="h-4 w-4" />{t("import.parse")}</>}
-          </Button>
+          <div className="flex gap-2">
+            <Button type="submit" disabled={loading || !importText.trim()} className="flex-1 h-11">
+              {loading ? <><Loader2 className="h-4 w-4 animate-spin" />{t("import.parsing")}</> : <><FileText className="h-4 w-4" />{t("import.parse")}</>}
+            </Button>
+            <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-1.5 rounded-md bg-white border border-zinc-200 px-4 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+              {ocrLoading ? <><Loader2 className="h-4 w-4 animate-spin" />{t("import.scanning_photo")}</> : <><Camera className="h-4 w-4" />{t("import.scan_photo")}</>}
+              <input type="file" accept="image/*" capture="environment" onChange={handleOCR} className="hidden" />
+            </label>
+          </div>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t("import.ocr_hint")}</p>
         </form>
       )}
 
