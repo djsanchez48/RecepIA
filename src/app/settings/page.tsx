@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TagInput } from "@/components/ui/TagInput";
 import { useI18n } from "@/lib/i18n-context";
-import type { Lang } from "@/lib/i18n";
+
+type Lang = "es" | "en";
 
 interface Profile {
   allergies: string[]; restrictions: string[]; dislikedIngredients: string[];
