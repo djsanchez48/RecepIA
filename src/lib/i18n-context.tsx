@@ -7,12 +7,13 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { type Lang, t as translate } from "@/lib/i18n";
+import { type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 
 interface I18nContextType {
   lang: Lang;
   setLang: (l: Lang) => void;
-  t: (key: Parameters<typeof translate>[1]) => string;
+  t: (key: string) => string;
 }
 
 const I18nContext = createContext<I18nContextType>({
@@ -21,19 +22,20 @@ const I18nContext = createContext<I18nContextType>({
   t: (key) => key,
 });
 
+function getLang(): Lang {
+  if (typeof window === "undefined") return "es";
+  const stored = localStorage.getItem("recepia-lang") as Lang | null;
+  if (stored === "es" || stored === "en") return stored;
+  const browserLang = navigator.language?.slice(0, 2);
+  return browserLang === "es" ? "es" : "en";
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("es");
-  const [ready, setReady] = useState(false);
+  const [lang, setLangState] = useState<Lang>(getLang);
 
   useEffect(() => {
-    const stored = localStorage.getItem("recepia-lang") as Lang | null;
-    if (stored === "es" || stored === "en") {
-      setLangState(stored);
-    } else {
-      const browserLang = navigator.language?.slice(0, 2);
-      setLangState(browserLang === "es" ? "es" : "en");
-    }
-    setReady(true);
+    const actual = getLang();
+    if (actual !== lang) setLangState(actual);
   }, []);
 
   const handleSetLang = (l: Lang) => {
@@ -41,28 +43,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("recepia-lang", l);
   };
 
-  if (!ready) {
-    return (
-      <I18nContext.Provider
-        value={{
-          lang: "es",
-          setLang: handleSetLang,
-          t: (k) => translate("es", k),
-        }}
-      >
-        {children}
-      </I18nContext.Provider>
-    );
-  }
+  const t = (key: string): string => {
+    const dict = translations[lang] as Record<string, string> | undefined;
+    const esDict = translations["es"] as Record<string, string>;
+    return dict?.[key] ?? esDict[key] ?? key;
+  };
 
   return (
-    <I18nContext.Provider
-      value={{
-        lang,
-        setLang: handleSetLang,
-        t: (k) => translate(lang, k),
-      }}
-    >
+    <I18nContext.Provider value={{ lang, setLang: handleSetLang, t }}>
       {children}
     </I18nContext.Provider>
   );
