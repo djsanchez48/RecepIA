@@ -22,26 +22,46 @@ const I18nContext = createContext<I18nContextType>({
 });
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("es");
+  const [lang, setLangState] = useState<Lang>("es");
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("recepia-lang") as Lang | null;
-    if (stored === "es" || stored === "en") setLang(stored);
-    else {
+    if (stored === "es" || stored === "en") {
+      setLangState(stored);
+    } else {
       const browserLang = navigator.language?.slice(0, 2);
-      if (browserLang === "es") setLang("es");
-      else setLang("en");
+      setLangState(browserLang === "es" ? "es" : "en");
     }
+    setReady(true);
   }, []);
 
   const handleSetLang = (l: Lang) => {
-    setLang(l);
+    setLangState(l);
     localStorage.setItem("recepia-lang", l);
   };
 
+  if (!ready) {
+    return (
+      <I18nContext.Provider
+        value={{
+          lang: "es",
+          setLang: handleSetLang,
+          t: (k) => translate("es", k),
+        }}
+      >
+        {children}
+      </I18nContext.Provider>
+    );
+  }
+
   return (
     <I18nContext.Provider
-      value={{ lang, setLang: handleSetLang, t: (key) => translate(lang, key) }}
+      value={{
+        lang,
+        setLang: handleSetLang,
+        t: (k) => translate(lang, k),
+      }}
     >
       {children}
     </I18nContext.Provider>
