@@ -9,7 +9,7 @@ interface RecipeListItemProps {
   recipe: {
     id: string; title: string; description: string | null;
     prepTimeMinutes: number | null; cookTimeMinutes: number | null;
-    tags: string[];
+    tags: string[]; source?: string;
     collections: { collection: { id: string; name: string; emoji: string | null } }[];
   };
 }
@@ -27,6 +27,11 @@ export function RecipeListItem({ recipe }: RecipeListItemProps) {
               <h3 className="font-semibold truncate">{recipe.title}</h3>
               {recipe.description && <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">{recipe.description}</p>}
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                {recipe.source === "imported" && (
+                  <span className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                    {t("import.badge")}
+                  </span>
+                )}
                 {totalTime > 0 && <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-0.5 text-xs dark:bg-zinc-800"><Clock className="h-3 w-3" /> {totalTime} {t("card.minutes")}</span>}
                 {recipe.tags?.slice(0, 3).map((tag) => <span key={tag} className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">{tag}</span>)}
               </div>

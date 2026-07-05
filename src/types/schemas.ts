@@ -21,5 +21,25 @@ export const generatedRecipeSchema = z.object({
   steps: z.array(z.string().min(1)).min(1, "Debe tener al menos un paso"),
 });
 
+export const parsedRecipeSchema = z.object({
+  title: z.string(),
+  description: z.string().nullable(),
+  prepTimeMinutes: z.number().int().nullable(),
+  cookTimeMinutes: z.number().int().nullable(),
+  servings: z.number().int().nullable(),
+  tags: z.array(z.string()),
+  ingredients: z.array(recipeIngredientSchema),
+  steps: z.array(z.string()),
+});
+
+export const parsedRecipeResultSchema = z.object({
+  isRecipe: z.boolean(),
+  confidence: z.enum(["high", "medium", "low"]),
+  recipe: parsedRecipeSchema.nullable(),
+  warnings: z.array(z.string()),
+});
+
 export type GeneratedRecipe = z.infer<typeof generatedRecipeSchema>;
+export type ParsedRecipe = z.infer<typeof parsedRecipeSchema>;
+export type ParsedRecipeResult = z.infer<typeof parsedRecipeResultSchema>;
 export type RecipeIngredient = z.infer<typeof recipeIngredientSchema>;

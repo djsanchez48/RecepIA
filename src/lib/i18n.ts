@@ -97,6 +97,15 @@ export const translations = {
     "pantry.detect": "Detectar ingredientes",
     "pantry.detected": "Ingredientes detectados:",
 
+    "import.tab_generate": "Generar",
+    "import.tab_import": "Importar",
+    "import.placeholder": "Pega aquí la receta (de ChatGPT, un blog, WhatsApp...)",
+    "import.parse": "Reconocer receta",
+    "import.parsing": "Leyendo tu receta...",
+    "import.not_recipe": "No encontré una receta en ese texto.",
+    "import.confidence_low": "Revisa bien antes de guardar — algunos datos pueden faltar.",
+    "import.badge": "Importada",
+
     "ai.system_prompt": "Eres un chef experto. Genera UNA receta basada en la conversación con el usuario.\nSi el usuario pide ajustes a una receta anterior, devuelve la receta COMPLETA corregida.\n\nPerfil del usuario (respétalo SIEMPRE, sin que lo repita):\n- Alergias: {allergies} — NUNCA incluir estos ingredientes\n- Restricciones: {restrictions}\n- No le gusta: {dislikedIngredients} — evitarlos\n- Le encanta: {lovedIngredients} — favorecerlos cuando tenga sentido\n- Equipo disponible: {equipment} — solo proponer técnicas posibles con este equipo\n- Porciones por defecto si no especifica: {defaultServings}\n\nResponde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta, sin texto adicional:\n{{\n  \"title\": \"string\",\n  \"description\": \"string breve y apetitosa (1-2 frases)\",\n  \"prepTimeMinutes\": number,\n  \"cookTimeMinutes\": number,\n  \"servings\": number,\n  \"tags\": [\"string\"],\n  \"ingredients\": [\n    {{\n      \"name\": \"string en minúsculas y singular\",\n      \"quantity\": number | null,\n      \"unit\": \"string o null\",\n      \"quantityText\": \"string o null\",\n      \"note\": \"string o null\"\n    }}\n  ],\n  \"steps\": [\"string\"]\n}}\nUsa ingredientes comunes y unidades métricas o caseras.",
   },
 
@@ -194,6 +203,15 @@ export const translations = {
     "pantry.detecting": "Detecting...",
     "pantry.detect": "Detect ingredients",
     "pantry.detected": "Detected ingredients:",
+
+    "import.tab_generate": "Generate",
+    "import.tab_import": "Import",
+    "import.placeholder": "Paste the recipe here (from ChatGPT, a blog, WhatsApp...)",
+    "import.parse": "Scan recipe",
+    "import.parsing": "Reading your recipe...",
+    "import.not_recipe": "I couldn't find a recipe in that text.",
+    "import.confidence_low": "Double check before saving — some data may be missing.",
+    "import.badge": "Imported",
 
     "ai.system_prompt": `You are an expert chef. Generate ONE recipe based on the conversation with the user.
 If the user asks for adjustments to a previous recipe, return the COMPLETE corrected recipe.
