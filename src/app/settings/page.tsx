@@ -190,11 +190,11 @@ export default function SettingsPage() {
               <select value={profile.activityLevel ?? ""} disabled={!consent} onChange={(e) => setProfile({ ...profile, activityLevel: e.target.value || null })}
                 className="w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900">
                 <option value="">—</option>
-                <option value="sedentario">{t("settings.body_activity_sedentario")}</option>
-                <option value="ligero">{t("settings.body_activity_ligero")}</option>
-                <option value="moderado">{t("settings.body_activity_moderado")}</option>
-                <option value="activo">{t("settings.body_activity_activo")}</option>
-                <option value="muy_activo">{t("settings.body_activity_muy_activo")}</option>
+                <option value="sedentario">{t("settings.body_activity_sedentario")} — poco o nada de ejercicio</option>
+                <option value="ligero">{t("settings.body_activity_ligero")} — 1-3 días por semana</option>
+                <option value="moderado">{t("settings.body_activity_moderado")} — 3-5 días por semana</option>
+                <option value="activo">{t("settings.body_activity_activo")} — 6-7 días por semana</option>
+                <option value="muy_activo">{t("settings.body_activity_muy_activo")} — ejercicio intenso diario</option>
               </select>
             </div>
           </div>
