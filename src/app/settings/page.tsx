@@ -35,11 +35,21 @@ export default function SettingsPage() {
   const [editingCol, setEditingCol] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [consent, setConsent] = useState(false);
+  const [profileScore, setProfileScore] = useState(0);
 
   useEffect(() => {
     fetch("/api/profile").then((r) => r.json()).then((p) => {
       setProfile(p);
       setConsent(!!p.healthDataConsentAt);
+      let score = 0;
+      if (p.allergies?.length || p.restrictions?.length) score++;
+      if (p.goals?.length) score++;
+      if (p.lovedIngredients?.length || p.dislikedIngredients?.length) score++;
+      if (p.equipment?.length) score++;
+      if (p.defaultServings) score++;
+      if (p.age || p.weightKg) score++;
+      if (p.biologicalSex || p.activityLevel) score++;
+      setProfileScore(score);
     });
     fetch("/api/collections").then((r) => r.json()).then(setCollections);
   }, []);
@@ -94,7 +104,20 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
-      <h1 className="mb-6 text-2xl font-bold">{t("settings.title")}</h1>
+      <h1 className="mb-4 text-2xl font-bold">{t("settings.title")}</h1>
+
+      <div className="mb-6 rounded-lg bg-zinc-50 px-4 py-3 dark:bg-zinc-800/50">
+        <div className="mb-1 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+          <span>Tu perfil</span>
+          <span>{profileScore} de 7</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-700">
+          <div
+            className="h-full rounded-full bg-orange-400 transition-all"
+            style={{ width: `${(profileScore / 7) * 100}%` }}
+          />
+        </div>
+      </div>
 
       <section className="mb-8">
         <h2 className="mb-4 text-lg font-semibold">{t("settings.language")}</h2>

@@ -85,6 +85,9 @@ model UserProfile {
   activityLevel       String?
   biologicalSex       String?
   healthDataConsentAt DateTime?
+  onboardingCompletedAt DateTime?
+  rejectedHints         String[]  @default([])
+  nudgeState            Json      @default("{}")
 }
 
 model GenerationDraft {
