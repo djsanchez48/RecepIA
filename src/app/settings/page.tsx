@@ -220,17 +220,7 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-
-        {profile.healthDataConsentAt && (
-          <Button variant="outline" size="sm" onClick={deleteHealthData} className="mt-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30">
-            <Trash2 className="h-4 w-4 mr-1" /> {t("settings.delete_data")}
-          </Button>
-        )}
       </section>
-
-      <Button onClick={saveProfile} className="mb-8 w-full">
-        {saved ? <><Check className="h-4 w-4" />{t("settings.saved")}</> : t("settings.save_profile")}
-      </Button>
 
       <section className="mb-8">
         <h2 className="mb-4 text-lg font-semibold">{t("settings.profile")}</h2>
@@ -246,6 +236,10 @@ export default function SettingsPage() {
           </div>
         </div>
       </section>
+
+      <Button onClick={saveProfile} className="mb-8 w-full">
+        {saved ? <><Check className="h-4 w-4" />{t("settings.saved")}</> : t("settings.save_profile")}
+      </Button>
 
       <section className="mb-8">
         <h2 className="mb-4 text-lg font-semibold">{t("settings.lists")}</h2>
