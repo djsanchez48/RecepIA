@@ -110,6 +110,7 @@ export const translations = {
     "settings.body_activity_muy_activo": "Muy activo",
     "settings.delete_data": "Borrar mis datos personales",
     "settings.delete_confirm": "¿Borrar todos tus datos personales? Tus objetivos se conservan.",
+    "settings.logout": "Cerrar sesión",
 
     "pantry.title": "Mi nevera",
     "pantry.subtitle": "Toma una foto de tus ingredientes y la IA te dirá qué puedes cocinar.",
@@ -257,6 +258,7 @@ export const translations = {
     "settings.body_activity_muy_activo": "Very active",
     "settings.delete_data": "Delete my personal data",
     "settings.delete_confirm": "Delete all your personal data? Your goals will be kept.",
+    "settings.logout": "Log out",
 
     "pantry.title": "My Pantry",
     "pantry.subtitle": "Take a photo of your ingredients and AI will tell you what you can cook.",

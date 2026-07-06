@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Edit2, Trash2, Check, X, Globe, Target } from "lucide-react";
+import { Edit2, Trash2, Check, X, Globe, Target, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TagInput } from "@/components/ui/TagInput";
@@ -249,9 +249,15 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      <section>
+      <section className="mb-8">
         <h2 className="mb-2 text-lg font-semibold">{t("settings.usage")}</h2>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">{generationCount} {t("settings.generations_month")}</p>
+        <p className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">{generationCount} {t("settings.generations_month")}</p>
+        <Button variant="outline" size="sm" onClick={async () => {
+          await fetch("/api/auth/logout", { method: "POST" });
+          window.location.href = "/acceso";
+        }} className="text-zinc-500">
+          <LogOut className="h-4 w-4 mr-1" /> {t("settings.logout")}
+        </Button>
       </section>
     </div>
   );
