@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createSessionToken, getAuthCookie, delay } from "@/lib/auth";
+import { createSessionToken, getAuthCookie } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-  await delay(1000);
-
   try {
     const { password } = await req.json();
 
@@ -11,22 +9,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
     }
 
-    const validPassword = process.env.ACCESS_PASSWORD;
-
-    const encoder = new TextEncoder();
-    const pwBuf = encoder.encode(password);
-    const validBuf = encoder.encode(validPassword);
-
-    if (pwBuf.length !== validBuf.length) {
-      return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
-    }
-
-    let equal = true;
-    for (let i = 0; i < pwBuf.length; i++) {
-      if (pwBuf[i] !== validBuf[i]) equal = false;
-    }
-
-    if (!equal) {
+    if (password !== process.env.ACCESS_PASSWORD) {
+      await new Promise((r) => setTimeout(r, 1000));
       return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
     }
 
@@ -42,6 +26,7 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch {
+    await new Promise((r) => setTimeout(r, 1000));
     return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
   }
 }
