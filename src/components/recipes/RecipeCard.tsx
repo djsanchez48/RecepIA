@@ -96,16 +96,16 @@ export function RecipeCard({ recipe, onSave, saving, goals }: RecipeCardProps) {
         {nutrition && (
           <div>
             <button onClick={() => setShowNutrition(!showNutrition)} className="flex w-full items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 text-sm font-medium hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800">
-              Ver detalle nutricional
+              {t("nutrition.view")}
               {showNutrition ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
             {showNutrition && (
               <div className="mt-2 space-y-1 rounded-lg bg-zinc-50 px-3 py-2 text-xs dark:bg-zinc-800/50">
-                <div className="flex justify-between"><span>🔥 Calorías</span><span className="font-medium">{nutrition.caloriesPerServing} kcal</span></div>
-                <div className="flex justify-between"><span>🍗 Proteína</span><span className="font-medium">{nutrition.proteinG}g</span></div>
-                <div className="flex justify-between"><span>🍞 Carbohidratos</span><span className="font-medium">{nutrition.carbsG}g</span></div>
-                <div className="flex justify-between"><span>🧈 Grasas</span><span className="font-medium">{nutrition.fatG}g</span></div>
-                <p className="mt-2 text-zinc-400">Estimación generada por IA — valores aproximados. Esto no reemplaza el consejo de un médico o nutricionista.</p>
+                <div className="flex justify-between"><span>🔥 {t("nutrition.calories")}</span><span className="font-medium">{nutrition.caloriesPerServing} kcal</span></div>
+                <div className="flex justify-between"><span>🍗 {t("nutrition.protein")}</span><span className="font-medium">{nutrition.proteinG}g</span></div>
+                <div className="flex justify-between"><span>🍞 {t("nutrition.carbs")}</span><span className="font-medium">{nutrition.carbsG}g</span></div>
+                <div className="flex justify-between"><span>🧈 {t("nutrition.fat")}</span><span className="font-medium">{nutrition.fatG}g</span></div>
+                <p className="mt-2 text-zinc-400">{t("nutrition.disclaimer")}</p>
               </div>
             )}
           </div>

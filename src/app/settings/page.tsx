@@ -86,7 +86,7 @@ export default function SettingsPage() {
   }
 
   async function deleteHealthData() {
-    if (!confirm("¿Borrar todos tus datos personales? Tus objetivos se conservan.")) return;
+    if (!confirm(t("settings.delete_confirm"))) return;
     await fetch("/api/profile/health-data", { method: "DELETE" });
     setProfile((p) => ({ ...p, age: null, weightKg: null, heightCm: null, activityLevel: null, biologicalSex: null, healthDataConsentAt: null }));
     setConsent(false);
@@ -109,8 +109,8 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-1 text-lg font-semibold">🎯 Mi objetivo</h2>
-        <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">RecepIA te orienta con sugerencias generales. No es una herramienta médica. Si tienes una condición de salud, consulta a un profesional.</p>
+        <h2 className="mb-1 text-lg font-semibold">🎯 {t("settings.objectives_title")}</h2>
+        <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">{t("settings.objectives_disclaimer")}</p>
 
         <div className="mb-3 flex items-center gap-2">
           <button
@@ -119,7 +119,7 @@ export default function SettingsPage() {
           >
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${profile.goalsActive ? "translate-x-6" : "translate-x-1"}`} />
           </button>
-          <span className="text-sm">{profile.goalsActive ? "Objetivos activos" : "Sin objetivo — modo antojo"}</span>
+          <span className="text-sm">{profile.goalsActive ? t("settings.objectives_on") : t("settings.objectives_off")}</span>
         </div>
 
         {profile.goalsActive && (
@@ -138,48 +138,48 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-1 text-lg font-semibold">📊 Datos opcionales</h2>
-        <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">Estos datos son opcionales. Si los compartes, las sugerencias se ajustan mejor. Sin ellos, tu objetivo funciona igual con valores generales.</p>
+        <h2 className="mb-1 text-lg font-semibold">📊 {t("settings.body_title")}</h2>
+        <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">{t("settings.body_subtitle")}</p>
 
         <label className="mb-3 flex items-start gap-2 text-xs text-zinc-600 dark:text-zinc-400">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)}
             className="mt-0.5 accent-orange-500" />
-          <span>Acepto que RecepIA guarde estos datos (edad, peso, estatura, actividad) únicamente para personalizar mis sugerencias. Los datos se almacenan en mi base de datos, no se comparten con terceros ni se envían a los proveedores de IA, y puedo borrarlos en cualquier momento.</span>
+          <span>{t("settings.body_consent")}</span>
         </label>
 
-        <div className={`space-y-3 ${!consent ? "pointer-events-none opacity-50" : ""}`}>
+        <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Edad</label>
+              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t("settings.body_age")}</label>
               <Input type="number" min={1} max={120} disabled={!consent} value={profile.age ?? ""} onChange={(e) => setProfile({ ...profile, age: e.target.value ? parseInt(e.target.value) : null })} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Peso (kg)</label>
+              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t("settings.body_weight")}</label>
               <Input type="number" min={30} max={300} step="0.1" disabled={!consent} value={profile.weightKg ?? ""} onChange={(e) => setProfile({ ...profile, weightKg: e.target.value ? parseFloat(e.target.value) : null })} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Estatura (cm)</label>
+              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t("settings.body_height")}</label>
               <Input type="number" min={100} max={250} disabled={!consent} value={profile.heightCm ?? ""} onChange={(e) => setProfile({ ...profile, heightCm: e.target.value ? parseInt(e.target.value) : null })} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">Actividad</label>
-              <select disabled={!consent} value={profile.activityLevel ?? ""} onChange={(e) => setProfile({ ...profile, activityLevel: e.target.value || null })}
-                className="w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">{t("settings.body_activity")}</label>
+              <select value={profile.activityLevel ?? ""} disabled={!consent} onChange={(e) => setProfile({ ...profile, activityLevel: e.target.value || null })}
+                className="w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900">
                 <option value="">—</option>
-                <option value="sedentario">Sedentario</option>
-                <option value="ligero">Ligero</option>
-                <option value="moderado">Moderado</option>
-                <option value="activo">Activo</option>
-                <option value="muy_activo">Muy activo</option>
+                <option value="sedentario">{t("settings.body_activity_sedentario")}</option>
+                <option value="ligero">{t("settings.body_activity_ligero")}</option>
+                <option value="moderado">{t("settings.body_activity_moderado")}</option>
+                <option value="activo">{t("settings.body_activity_activo")}</option>
+                <option value="muy_activo">{t("settings.body_activity_muy_activo")}</option>
               </select>
             </div>
           </div>
           <div>
             <div className="flex gap-2">
               {[
-                { value: "m", label: "Hombre" },
-                { value: "f", label: "Mujer" },
-                { value: null, label: "Prefiero no decir" },
+                { value: "m", label: t("settings.body_sex_m") },
+                { value: "f", label: t("settings.body_sex_f") },
+                { value: null, label: t("settings.body_sex_null") },
               ].map((opt) => (
                 <button key={opt.label} onClick={() => setProfile({ ...profile, biologicalSex: opt.value })}
                   disabled={!consent}
@@ -199,7 +199,7 @@ export default function SettingsPage() {
 
         {profile.healthDataConsentAt && (
           <Button variant="outline" size="sm" onClick={deleteHealthData} className="mt-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30">
-            <Trash2 className="h-4 w-4 mr-1" /> Borrar mis datos personales
+            <Trash2 className="h-4 w-4 mr-1" /> {t("settings.delete_data")}
           </Button>
         )}
       </section>
