@@ -20,13 +20,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "RecepIA",
+  title: "Fulse",
   description: "Tu cocina con IA — recetas, listas y planificación",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "RecepIA",
+    title: "Fulse",
   },
 };
 

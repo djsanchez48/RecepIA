@@ -26,8 +26,8 @@ describe("i18n", () => {
   });
 
   it("t() returns correct translation", () => {
-    expect(t("es", "app.title")).toBe("RecepIA");
-    expect(t("en", "app.title")).toBe("RecepIA");
+    expect(t("es", "app.title")).toBe("Fulse");
+    expect(t("en", "app.title")).toBe("Fulse");
     expect(t("es", "nav.create")).toBe("Crear");
     expect(t("en", "nav.create")).toBe("Create");
   });

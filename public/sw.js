@@ -1,4 +1,4 @@
-const CACHE_NAME = "recepia-v4";
+const CACHE_NAME = "fulse-v1";
 
 const PRECACHE_URLS = [
   "/",

@@ -6,7 +6,7 @@ type Lang = "es" | "en";
 
 const translations = {
   es: {
-    "app.title": "RecepIA",
+    "app.title": "Fulse",
     "app.description": "Tu cocina con IA — recetas, listas y planificación",
 
     "nav.create": "Crear",
@@ -95,12 +95,12 @@ const translations = {
     "settings.lang_es": "Español",
     "settings.lang_en": "English",
     "settings.objectives_title": "Mi objetivo",
-    "settings.objectives_disclaimer": "RecepIA te orienta con sugerencias generales. No es una herramienta médica. Si tienes una condición de salud, consulta a un profesional.",
+    "settings.objectives_disclaimer": "Fulse te orienta con sugerencias generales. No es una herramienta médica. Si tienes una condición de salud, consulta a un profesional.",
     "settings.objectives_on": "Objetivos activos",
     "settings.objectives_off": "Sin objetivo — modo antojo",
     "settings.body_title": "Datos opcionales",
     "settings.body_subtitle": "Estos datos son opcionales. Si los compartes, las sugerencias se ajustan mejor. Sin ellos, tu objetivo funciona igual con valores generales.",
-    "settings.body_consent": "Acepto que RecepIA guarde estos datos (edad, peso, estatura, actividad) únicamente para personalizar mis sugerencias. Los datos se almacenan en mi base de datos, no se comparten con terceros ni se envían a los proveedores de IA, y puedo borrarlos en cualquier momento.",
+    "settings.body_consent": "Acepto que Fulse guarde estos datos (edad, peso, estatura, actividad) únicamente para personalizar mis sugerencias. Los datos se almacenan en mi base de datos, no se comparten con terceros ni se envían a los proveedores de IA, y puedo borrarlos en cualquier momento.",
     "settings.body_age": "Edad",
     "settings.body_weight": "Peso (kg)",
     "settings.body_height": "Estatura (cm)",
@@ -162,7 +162,7 @@ const translations = {
   },
 
   en: {
-    "app.title": "RecepIA",
+    "app.title": "Fulse",
     "app.description": "Your AI kitchen — recipes, lists, and meal planning",
 
     "nav.create": "Create",
@@ -251,12 +251,12 @@ const translations = {
     "settings.lang_es": "Español",
     "settings.lang_en": "English",
     "settings.objectives_title": "My Goal",
-    "settings.objectives_disclaimer": "RecepIA provides general guidance. This is not a medical tool. If you have a health condition, consult a professional.",
+    "settings.objectives_disclaimer": "Fulse provides general guidance. This is not a medical tool. If you have a health condition, consult a professional.",
     "settings.objectives_on": "Goals active",
     "settings.objectives_off": "No goal — treat mode",
     "settings.body_title": "Optional data",
     "settings.body_subtitle": "This data is optional. If you share it, suggestions will be more accurate. Your goal works without it using general values.",
-    "settings.body_consent": "I agree that RecepIA stores this data (age, weight, height, activity) solely to personalize my recipe suggestions. The data is stored in my database, is not shared with third parties or sent to AI providers, and I can delete it anytime.",
+    "settings.body_consent": "I agree that Fulse stores this data (age, weight, height, activity) solely to personalize my recipe suggestions. The data is stored in my database, is not shared with third parties or sent to AI providers, and I can delete it anytime.",
     "settings.body_age": "Age",
     "settings.body_weight": "Weight (kg)",
     "settings.body_height": "Height (cm)",
