@@ -34,6 +34,9 @@ function buildSystemPrompt(
   }
 
   prompt += "\n\nIncluye en tu JSON un campo 'nutrition' con { caloriesPerServing, proteinG, carbsG, fatG } estimados por porción, y un campo 'nutriBadges' con etiquetas del catálogo: [\"alta_proteina\", \"ligera\", \"buena_fibra\", \"dulce\", \"contundente\", \"alta_fibra\", \"baja_azucar\", \"alto_sodio\"].";
+
+  prompt += "\n\nAdemás, si el lenguaje del usuario sugiere una PREFERENCIA ESTABLE (NO una instrucción puntual), emite un campo 'profileHints'. Ejemplos de preferencia estable: 'odio el cilantro', 'nunca le pongo', 'me encanta el ajo', 'en mi airfryer'. Instrucciones puntuales que NO generan hint: 'hoy sin horno', 'esta vez sin cebolla', 'no tengo tomate'. Ante la duda, NO emitas el hint. Formato: [{ \"type\": \"disliked_ingredient\"|\"loved_ingredient\"|\"equipment\"|\"possible_allergy\", \"value\": \"nombre\", \"evidence\": \"frase del usuario\" }]. Máximo 1 hint.";
+
   return prompt;
 }
 

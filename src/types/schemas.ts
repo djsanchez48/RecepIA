@@ -26,6 +26,11 @@ export const generatedRecipeSchema = z.object({
     fatG: z.number().min(0),
   }).optional(),
   nutriBadges: z.array(z.string()).optional(),
+  profileHints: z.array(z.object({
+    type: z.enum(["disliked_ingredient", "loved_ingredient", "equipment", "possible_allergy"]),
+    value: z.string(),
+    evidence: z.string(),
+  })).optional(),
 });
 
 export const parsedRecipeSchema = z.object({

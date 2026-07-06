@@ -35,6 +35,7 @@ export default function Home() {
   const [source, setSource] = useState<"ai" | "imported">("ai");
   const [ocrLoading, setOcrLoading] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [profileHint, setProfileHint] = useState<{ type: string; value: string } | null>(null);
 
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -72,6 +73,13 @@ export default function Home() {
       if (!res.ok) throw new Error(data.error ?? t("create.error"));
       setRecipe(data); setDraftId(data.draftId); setSource("ai");
       setMessages(newMessages); setAdjustment(""); setPrompt(""); setSaved(false);
+      if (data.profileHints?.[0]) {
+        const hint = data.profileHints[0];
+        fetch(`/api/profile`).then(r => r.json()).then(p => {
+          const rejected = p.rejectedHints ?? [];
+          if (!rejected.includes(`${hint.type}:${hint.value}`)) setProfileHint(hint);
+        });
+      }
       loadDrafts();
     } catch (err) {
       setError(err instanceof Error ? err.message : t("create.error"));
@@ -138,6 +146,27 @@ export default function Home() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al escanear");
     } finally { setOcrLoading(false); }
+  }
+
+  async function handleSaveHint(type: string, value: string) {
+    const field = type === "disliked_ingredient" ? "dislikedIngredients"
+      : type === "loved_ingredient" ? "lovedIngredients"
+      : type === "equipment" ? "equipment"
+      : "allergies";
+    const res = await fetch("/api/profile", { method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [field]: [value] }),
+    });
+    if (res.ok) { setProfileHint(null); }
+  }
+
+  async function rejectHint(type: string, value: string) {
+    const key = `${type}:${value}`;
+    await fetch("/api/profile", { method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rejectedHints: [key] }),
+    });
+    setProfileHint(null);
   }
 
   async function handleSave(collectionIds: string[]) {
@@ -293,6 +322,25 @@ export default function Home() {
             />
           ) : (
             <RecipeCard recipe={recipe} onSave={() => setSheetOpen(true)} saving={saving} />
+          )}
+
+          {profileHint && (
+            <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-sm dark:bg-blue-900/20">
+              <span className="text-blue-700 dark:text-blue-300">
+                {profileHint.type === "possible_allergy"
+                  ? `Eso suena a alergia — ¿la agrego a tu perfil para nunca incluir "${profileHint.value}"?`
+                  : `¿Guardo que ${profileHint.type === "disliked_ingredient" ? `no te gusta "${profileHint.value}"` : profileHint.type === "loved_ingredient" ? `te encanta "${profileHint.value}"` : `tienes "${profileHint.value}"`}?`}
+              </span>
+              <button onClick={() => profileHint.type === "possible_allergy"
+                ? confirm(`¿Agregar "${profileHint.value}" como alergia?`) && handleSaveHint("allergies", profileHint.value)
+                : handleSaveHint(profileHint.type, profileHint.value)
+              } className="ml-auto rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700 hover:bg-blue-200 dark:bg-blue-800 dark:text-blue-300">
+                Sí, guardar
+              </button>
+              <button onClick={() => rejectHint(profileHint.type, profileHint.value)} className="text-xs text-zinc-400 hover:text-zinc-600 dark:text-zinc-500">
+                No
+              </button>
+            </div>
           )}
 
           {saved && <p className="text-center text-sm text-green-600 dark:text-green-400">{t("create.saved")}</p>}
