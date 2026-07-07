@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Plus, Sparkles } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RecipeListItem } from "@/components/recipes/RecipeListItem";
 import { CollectionSheet } from "@/components/recipes/CollectionSheet";
+import { CollectionGrid } from "@/components/recipes/CollectionGrid";
 import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 
@@ -19,7 +20,6 @@ interface RecipeItem {
 
 export default function RecipesPage() {
   const { t } = useI18n();
-  const [collections, setCollections] = useState<Collection[]>([]);
   const [activeCollection, setActiveCollection] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [timeFilter, setTimeFilter] = useState<string | null>(null);
@@ -46,7 +46,6 @@ export default function RecipesPage() {
   }, [search, timeFilter, activeCollection]);
 
   useEffect(() => { loadRecipes(); }, [loadRecipes]);
-  useEffect(() => { fetch("/api/collections").then((r) => r.json()).then(setCollections); }, []);
 
   async function handleBookmarkSave(collectionIds: string[]) {
     if (!bookmarkRecipe) return;
@@ -66,19 +65,17 @@ export default function RecipesPage() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
           <Input placeholder={t("recipes.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-          <button onClick={() => setActiveCollection(null)} className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${!activeCollection ? "bg-orange-500 text-white" : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"}`}>{t("recipes.all")}</button>
-          {collections.map((col) => (
-            <button key={col.id} onClick={() => setActiveCollection(col.id)} className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${activeCollection === col.id ? "bg-orange-500 text-white" : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"}`}>{col.emoji} {col.name} <span className="ml-1 opacity-60">{col._count.recipes}</span></button>
-          ))}
-          <button onClick={async () => {
+        <CollectionGrid
+          activeId={activeCollection}
+          onSelect={setActiveCollection}
+          onNew={async () => {
             const name = prompt(t("recipes.new_prompt"));
             if (name) {
-              const res = await fetch("/api/collections", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
-              if (res.ok) { const created = await res.json(); setCollections((prev) => [...prev, created]); setActiveCollection(created.id); }
+              await fetch("/api/collections", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+              window.location.reload();
             }
-          }} className="shrink-0 rounded-full border border-dashed border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-500 hover:border-orange-300 hover:text-orange-500 dark:border-zinc-600 dark:text-zinc-400"><Plus className="inline h-3 w-3 mr-0.5" />{t("recipes.new")}</button>
-        </div>
+          }}
+        />
         <div className="flex gap-2">
           {TIME_FILTERS.map((tf) => (
             <button key={tf.value} onClick={() => setTimeFilter(timeFilter === tf.value ? null : tf.value)} className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${timeFilter === tf.value ? "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"}`}>{tf.label}</button>
