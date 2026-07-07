@@ -8,7 +8,7 @@ interface CollectionItem {
   _count: { recipes: number };
 }
 
-const EMOJIS = ["⭐", "🍳", "🥗", "🍝", "🍰", "🥩", "🌮", "🍕", "🥑", "🍜", "🧁", "🍲", "🥞", "🍩", "🌯", "🥘"];
+const EMOJIS = ["⭐", "🍳", "🥗", "🍝", "🍰", "🥩", "🌮", "🍕", "🥑", "🍜", "🫗", "🍲", "🥞", "🍩", "🌯", "🥘"];
 
 export function CollectionGrid({ activeId, onSelect }: {
   activeId: string | null;
