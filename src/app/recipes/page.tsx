@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RecipeListItem } from "@/components/recipes/RecipeListItem";
 import { CollectionSheet } from "@/components/recipes/CollectionSheet";
-import { CollectionGrid } from "@/components/recipes/CollectionGrid";
+import { CollectionDropdown } from "@/components/recipes/CollectionGrid";
 import { CollectionManager } from "@/components/recipes/CollectionManager";
 import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
@@ -72,7 +72,7 @@ export default function RecipesPage() {
             <Settings2 className="h-4 w-4" />
           </Button>
         </div>
-        <CollectionGrid
+        <CollectionDropdown
           activeId={activeCollection}
           onSelect={setActiveCollection}
         />

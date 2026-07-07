@@ -1,97 +1,67 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ChevronDown, Check } from "lucide-react";
 
 interface CollectionItem {
   id: string; name: string; emoji: string | null;
   _count: { recipes: number };
 }
 
-const EMOJIS = ["⭐", "🍳", "🥗", "🍝", "🍰", "🥩", "🌮", "🍕", "🥑", "🍜", "🫗", "🍲", "🥞", "🍩", "🌯", "🥘"];
-
-export function CollectionGrid({ activeId, onSelect }: {
+export function CollectionDropdown({ activeId, onSelect }: {
   activeId: string | null;
   onSelect: (id: string | null) => void;
 }) {
   const [collections, setCollections] = useState<CollectionItem[]>([]);
-  const [creating, setCreating] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [newEmoji, setNewEmoji] = useState("⭐");
+  const [open, setOpen] = useState(false);
 
-  async function loadCollections() {
-    const res = await fetch("/api/collections");
-    if (res.ok) setCollections(await res.json());
-  }
+  useEffect(() => {
+    fetch("/api/collections").then((r) => r.json()).then(setCollections);
+  }, []);
 
-  useEffect(() => { loadCollections(); }, []);
-
-  async function handleCreate() {
-    if (!newName.trim()) return;
-    const res = await fetch("/api/collections", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newName.trim(), emoji: newEmoji }),
-    });
-    if (res.ok) {
-      const created = await res.json();
-      setCollections((prev) => [...prev, created]);
-      setCreating(false); setNewName(""); setNewEmoji("⭐");
-      onSelect(created.id);
-    }
-  }
+  const active = collections.find((c) => c.id === activeId);
 
   return (
-    <div>
-      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        <button onClick={() => onSelect(null)}
-          className={`flex shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border-2 px-4 py-3 transition-colors w-[90px] h-[96px] ${
-            !activeId ? "border-orange-400 bg-orange-50 dark:border-orange-500 dark:bg-orange-900/20"
-              : "border-zinc-200 bg-white hover:border-orange-200 dark:border-zinc-700 dark:bg-zinc-900"}`}>
-          <span className="text-2xl">📋</span>
-          <span className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 leading-tight text-center">Todas</span>
-        </button>
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+      >
+        <span className="flex items-center gap-2 truncate">
+          <span>{active?.emoji || "📋"}</span>
+          <span className="font-medium">{active?.name || "Todas las recetas"}</span>
+          {activeId && <span className="text-zinc-400">{active?._count.recipes}</span>}
+        </span>
+        <ChevronDown className={`h-4 w-4 shrink-0 text-zinc-400 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
 
-        {collections.map((col) => (
-          <button key={col.id} onClick={() => onSelect(col.id)}
-            className={`flex shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border-2 px-4 py-3 transition-colors w-[90px] h-[96px] ${
-              activeId === col.id ? "border-orange-400 bg-orange-50 dark:border-orange-500 dark:bg-orange-900/20"
-                : "border-zinc-200 bg-white hover:border-orange-200 dark:border-zinc-700 dark:bg-zinc-900"}`}>
-            <span className="text-2xl">{col.emoji || "📁"}</span>
-            <span className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 leading-tight text-center line-clamp-2">{col.name}</span>
-            <span className="text-[10px] text-zinc-400">{col._count.recipes}</span>
-          </button>
-        ))}
-
-        {creating ? (
-          <div className="flex shrink-0 flex-col gap-2 rounded-2xl border-2 border-orange-300 bg-white p-3 dark:border-orange-600 dark:bg-zinc-900 w-[180px]">
-            <p className="text-[10px] text-zinc-400">Elige un emoji:</p>
-            <div className="flex flex-wrap gap-1">
-              {EMOJIS.map((e) => (
-                <button key={e} onClick={() => setNewEmoji(e)}
-                  className={`rounded text-lg leading-none p-0.5 ${newEmoji === e ? "bg-orange-100 ring-1 ring-orange-400" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>
-                  {e}
-                </button>
-              ))}
-            </div>
-            <input value={newName} onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-              placeholder="Nombre de la lista..."
-              className="w-full rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 dark:border-zinc-700 dark:bg-zinc-800" autoFocus />
-            <div className="flex gap-1">
-              <button onClick={handleCreate} disabled={!newName.trim()}
-                className="flex-1 rounded bg-orange-500 px-2 py-1 text-xs font-medium text-white hover:bg-orange-600 disabled:opacity-50">Crear</button>
-              <button onClick={() => { setCreating(false); setNewName(""); }}
-                className="rounded bg-zinc-100 px-2 py-1 text-xs text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400">Cancelar</button>
-            </div>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute left-0 right-0 z-20 mt-1 max-h-60 overflow-y-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
+            <button
+              onClick={() => { onSelect(null); setOpen(false); }}
+              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-700"
+            >
+              <span>📋</span>
+              <span className="font-medium">Todas las recetas</span>
+              {!activeId && <Check className="ml-auto h-4 w-4 text-orange-500" />}
+            </button>
+            {collections.map((col) => (
+              <button
+                key={col.id}
+                onClick={() => { onSelect(col.id); setOpen(false); }}
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-700"
+              >
+                <span>{col.emoji || "📁"}</span>
+                <span className="font-medium truncate">{col.name}</span>
+                <span className="ml-auto text-xs text-zinc-400">{col._count.recipes}</span>
+                {activeId === col.id && <Check className="ml-1 h-4 w-4 text-orange-500" />}
+              </button>
+            ))}
           </div>
-        ) : (
-          <button onClick={() => setCreating(true)}
-            className="flex shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-zinc-300 px-4 py-3 text-zinc-400 hover:border-orange-300 hover:text-orange-500 dark:border-zinc-600 dark:hover:border-orange-600 w-[90px] h-[96px]">
-            <span className="text-2xl">+</span>
-            <span className="text-[10px] font-medium">Nueva</span>
-          </button>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }
