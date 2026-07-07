@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Sparkles } from "lucide-react";
+import { Search, Sparkles, Settings2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RecipeListItem } from "@/components/recipes/RecipeListItem";
 import { CollectionSheet } from "@/components/recipes/CollectionSheet";
 import { CollectionGrid } from "@/components/recipes/CollectionGrid";
+import { CollectionManager } from "@/components/recipes/CollectionManager";
 import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 
@@ -27,6 +28,7 @@ export default function RecipesPage() {
   const [loading, setLoading] = useState(true);
   const [bookmarkOpen, setBookmarkOpen] = useState(false);
   const [bookmarkRecipe, setBookmarkRecipe] = useState<{ id: string; collectionIds: string[] } | null>(null);
+  const [showManager, setShowManager] = useState(false);
 
   const TIME_FILTERS = [
     { label: t("recipes.time_15"), value: "15" },
@@ -61,14 +63,27 @@ export default function RecipesPage() {
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
       <h1 className="mb-4 text-2xl font-bold">{t("recipes.title")}</h1>
       <div className="mb-4 space-y-3">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-          <Input placeholder={t("recipes.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+            <Input placeholder={t("recipes.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+          </div>
+          <Button variant="outline" size="icon" onClick={() => setShowManager(!showManager)} className="shrink-0">
+            <Settings2 className="h-4 w-4" />
+          </Button>
         </div>
         <CollectionGrid
           activeId={activeCollection}
           onSelect={setActiveCollection}
         />
+
+        {showManager && (
+          <div className="mb-4">
+            <h3 className="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">Gestionar listas</h3>
+            <CollectionManager />
+          </div>
+        )}
+
         <div className="flex gap-2">
           {TIME_FILTERS.map((tf) => (
             <button key={tf.value} onClick={() => setTimeFilter(timeFilter === tf.value ? null : tf.value)} className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${timeFilter === tf.value ? "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"}`}>{tf.label}</button>
