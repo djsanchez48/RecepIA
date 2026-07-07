@@ -68,13 +68,6 @@ export default function RecipesPage() {
         <CollectionGrid
           activeId={activeCollection}
           onSelect={setActiveCollection}
-          onNew={async () => {
-            const name = prompt(t("recipes.new_prompt"));
-            if (name) {
-              await fetch("/api/collections", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
-              window.location.reload();
-            }
-          }}
         />
         <div className="flex gap-2">
           {TIME_FILTERS.map((tf) => (
