@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Sparkles, Settings2 } from "lucide-react";
+import { Search, Sparkles, Settings } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RecipeListItem } from "@/components/recipes/RecipeListItem";
@@ -63,19 +63,19 @@ export default function RecipesPage() {
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
       <h1 className="mb-4 text-2xl font-bold">{t("recipes.title")}</h1>
       <div className="mb-4 space-y-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+          <Input placeholder={t("recipes.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+        </div>
+
         <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <Input placeholder={t("recipes.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+          <div className="flex-1">
+            <CollectionDropdown activeId={activeCollection} onSelect={setActiveCollection} />
           </div>
           <Button variant="outline" size="icon" onClick={() => setShowManager(!showManager)} className="shrink-0">
-            <Settings2 className="h-4 w-4" />
+            <Settings className={`h-4 w-4 ${showManager ? "text-orange-500" : ""}`} />
           </Button>
         </div>
-        <CollectionDropdown
-          activeId={activeCollection}
-          onSelect={setActiveCollection}
-        />
 
         {showManager && (
           <div className="mb-4">
