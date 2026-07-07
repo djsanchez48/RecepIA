@@ -107,6 +107,12 @@ export default function BienvenidaPage() {
             );
           })}
         </div>
+        {selectedAllergies.filter(a => !COMMON_ALLERGIES.some(c => c.value === a)).map((a) => (
+          <span key={a} className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-sm text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
+            {a}
+            <button onClick={() => setSelectedAllergies(prev => prev.filter(x => x !== a))} className="ml-1 text-orange-500 hover:text-orange-700">×</button>
+          </span>
+        ))}
         <div className="flex gap-2">
           <Input
             placeholder="Otra..."
