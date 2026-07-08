@@ -1,4 +1,4 @@
-export type Goal = "bajar_peso" | "ganar_musculo" | "mas_saludable" | "mas_proteina" | "menos_azucar" | "menos_sal" | "mas_vegetales" | "economico";
+export type Goal = "bajar_peso" | "ganar_musculo" | "mas_saludable" | "mantenerme" | "mas_proteina" | "menos_azucar" | "menos_sal" | "mas_vegetales" | "economico";
 
 export interface GoalInfo {
   id: Goal;
@@ -10,6 +10,7 @@ export const GOAL_CATALOG: GoalInfo[] = [
   { id: "bajar_peso", label: "Bajar de peso", emoji: "⚖️" },
   { id: "ganar_musculo", label: "Ganar masa muscular", emoji: "💪" },
   { id: "mas_saludable", label: "Comer más saludable", emoji: "🥗" },
+  { id: "mantenerme", label: "Mantenerme", emoji: "⚡" },
   { id: "mas_proteina", label: "Más proteína", emoji: "🍗" },
   { id: "menos_azucar", label: "Menos azúcar", emoji: "🍬" },
   { id: "menos_sal", label: "Menos sal", emoji: "🧂" },
