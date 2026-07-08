@@ -27,6 +27,8 @@ model Recipe {
   fatG               Float?
   nutriBadges        String[]         @default([])
   nutriAnalyzedAt    DateTime?
+  cookedCount     Int                @default(0)
+  lastCookedAt    DateTime?
 }
 
 model Ingredient {
@@ -88,6 +90,8 @@ model UserProfile {
   onboardingCompletedAt DateTime?
   rejectedHints         String[]  @default([])
   nudgeState            Json      @default("{}")
+  memoryProfile         Json      @default("{}")
+  memoryEnabled         Boolean   @default(true)
 }
 
 model GenerationDraft {
@@ -104,4 +108,17 @@ model AiGeneration {
   promptTokens     Int?
   completionTokens Int?
   createdAt        DateTime @default(now())
+}
+
+model PreferenceEvent {
+  id        String   @id @default(cuid())
+  type      String   // "recipe_saved"|"recipe_collected"|"recipe_cooked"|"recipe_deleted"|"draft_discarded"
+  entity    String   // "ingredient"|"tag"|"badge"
+  value     String
+  weight    Int
+  recipeId  String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, value])
+  @@index([createdAt])
 }

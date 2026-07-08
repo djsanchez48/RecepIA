@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { extractEventPayloads, trackEvents } from "@/lib/insights/track";
 
 export async function POST(req: NextRequest) {
   try {
@@ -83,6 +84,33 @@ export async function POST(req: NextRequest) {
     if (draftId) {
       await prisma.generationDraft.delete({ where: { id: draftId } }).catch(() => {});
     }
+
+    const savedEvents = extractEventPayloads(
+      "recipe_saved",
+      {
+        ingredients: ingredients as { name: string }[],
+        tags: tags as string[] | undefined,
+        badges: nutriBadges as string[] | undefined,
+      },
+      2,
+      recipe.id,
+    );
+
+    if (collectionIds?.length) {
+      const collectedEvents = extractEventPayloads(
+        "recipe_collected",
+        {
+          ingredients: ingredients as { name: string }[],
+          tags: tags as string[] | undefined,
+          badges: nutriBadges as string[] | undefined,
+        },
+        1,
+        recipe.id,
+      );
+      savedEvents.push(...collectedEvents);
+    }
+
+    trackEvents(savedEvents).catch((err) => console.error("trackEvents error:", err));
 
     return NextResponse.json(recipe, { status: 201 });
   } catch (error) {
