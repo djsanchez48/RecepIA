@@ -96,7 +96,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
-      <h1 className="text-2xl font-bold leading-tight">{recipe.title}</h1>
+      <h1 className="text-xl font-bold leading-tight">{recipe.title}</h1>
       {recipe.description && <p className="mt-1 text-zinc-500 dark:text-zinc-400">{recipe.description}</p>}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {recipe.tags?.map((tag) => <span key={tag} className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">{tag}</span>)}
@@ -121,7 +121,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
       )}
 
       <div className="mt-6">
-        <h2 className="mb-3 text-lg font-semibold">{t("detail.ingredients")}</h2>
+        <h2 className="mb-3 text-base font-semibold">{t("detail.ingredients")}</h2>
         <ul className="space-y-2">
           {recipe.ingredients.map((ing) => {
             const quantity = formatQuantity(ing);
@@ -141,7 +141,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
       </div>
 
       <div className="mt-6">
-        <h2 className="mb-3 text-lg font-semibold">{t("detail.preparation")}</h2>
+        <h2 className="mb-3 text-base font-semibold">{t("detail.preparation")}</h2>
         <ol className="space-y-4">
           {recipe.steps.map((step, i) => (
             <li key={i} className="flex gap-3">

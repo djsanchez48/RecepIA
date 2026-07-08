@@ -61,7 +61,7 @@ export default function RecipesPage() {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
-      <h1 className="mb-4 text-2xl font-bold">{t("recipes.title")}</h1>
+      <h1 className="mb-4 text-xl font-bold">{t("recipes.title")}</h1>
       <div className="mb-4 space-y-3">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />

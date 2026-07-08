@@ -210,7 +210,7 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
-      <h1 className="mb-1 text-2xl font-bold tracking-tight">{t("create.title")}</h1>
+      <h1 className="mb-1 text-xl font-bold tracking-tight">{t("create.title")}</h1>
       <p className="mb-5 text-sm text-zinc-500 dark:text-zinc-400">{t("create.subtitle")}</p>
 
       <div className="mb-4 flex rounded-lg bg-zinc-100 p-1 dark:bg-zinc-800">
@@ -369,7 +369,7 @@ export default function Home() {
 
       {drafts.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-semibold">{t("create.recent")}</h2>
+          <h2 className="mb-3 text-base font-semibold">{t("create.recent")}</h2>
           <div className="space-y-2">
             {drafts.map((draft) => (
               <DraftCard key={draft.id} draft={draft}

@@ -151,7 +151,7 @@ export default function PantryPage() {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
-      <h1 className="mb-1 text-2xl font-bold tracking-tight">{t("pantry.title")}</h1>
+      <h1 className="mb-1 text-xl font-bold tracking-tight">{t("pantry.title")}</h1>
       <p className="mb-5 text-sm text-zinc-500 dark:text-zinc-400">{t("pantry.subtitle")}</p>
 
       <div className="mb-6">

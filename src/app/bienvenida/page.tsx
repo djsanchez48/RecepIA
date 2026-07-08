@@ -80,7 +80,7 @@ export default function BienvenidaPage() {
     <div className="mx-auto max-w-xl px-4 py-10 pb-24">
       <div className="mb-8 text-center">
         <span className="text-5xl">🍳</span>
-        <h1 className="mt-4 text-2xl font-bold">Hagamos recetas para ti</h1>
+        <h1 className="mt-4 text-xl font-bold">Hagamos recetas para ti</h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
           20 segundos y empezamos a cocinar. Todo es opcional.
         </p>
@@ -152,7 +152,7 @@ export default function BienvenidaPage() {
       </div>
 
       <div className="space-y-3">
-        <Button onClick={() => finish(false)} disabled={saving} className="w-full h-12 text-base" size="lg">
+        <Button onClick={() => finish(false)} disabled={saving} className="w-full h-12" size="lg">
           Empezar a cocinar <ArrowRight className="ml-1 h-5 w-5" />
         </Button>
         <button

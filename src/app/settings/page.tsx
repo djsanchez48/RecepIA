@@ -104,7 +104,7 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-6 pb-24">
-      <h1 className="mb-4 text-2xl font-bold">{t("settings.title")}</h1>
+      <h1 className="mb-4 text-xl font-bold">{t("settings.title")}</h1>
 
       <div className="mb-6 rounded-lg bg-zinc-50 px-4 py-3 dark:bg-zinc-800/50">
         <div className="mb-1 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
@@ -120,7 +120,7 @@ export default function SettingsPage() {
       </div>
 
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">{t("settings.language")}</h2>
+        <h2 className="mb-4 text-base font-semibold">{t("settings.language")}</h2>
         <div className="flex gap-2">
           {(["es", "en"] as Lang[]).map((l) => (
             <button key={l} onClick={() => setLang(l)}
@@ -132,7 +132,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-1 text-lg font-semibold">🎯 {t("settings.objectives_title")}</h2>
+        <h2 className="mb-1 text-base font-semibold">🎯 {t("settings.objectives_title")}</h2>
         <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">{t("settings.objectives_disclaimer")}</p>
 
         <div className="mb-3 flex items-center gap-2">
@@ -162,7 +162,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-1 text-lg font-semibold">📊 {t("settings.body_title")}</h2>
+        <h2 className="mb-1 text-base font-semibold">📊 {t("settings.body_title")}</h2>
         <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">{t("settings.body_subtitle")}</p>
 
         <label className="mb-3 flex items-start gap-2 text-xs text-zinc-600 dark:text-zinc-400">
@@ -223,7 +223,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">{t("settings.profile")}</h2>
+        <h2 className="mb-4 text-base font-semibold">{t("settings.profile")}</h2>
         <div className="space-y-4">
           <TagInput label={t("settings.allergies")} values={profile.allergies} onChange={(allergies) => setProfile({ ...profile, allergies })} placeholder={t("settings.allergies_placeholder")} />
           <TagInput label={t("settings.restrictions")} values={profile.restrictions} onChange={(restrictions) => setProfile({ ...profile, restrictions })} placeholder={t("settings.restrictions_placeholder")} />
@@ -255,7 +255,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">{t("settings.lists")}</h2>
+        <h2 className="mb-4 text-base font-semibold">{t("settings.lists")}</h2>
         <div className="space-y-2">
           {collections.map((col) => (
             <div key={col.id} className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
@@ -280,7 +280,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-8">
-        <h2 className="mb-2 text-lg font-semibold">{t("settings.usage")}</h2>
+        <h2 className="mb-2 text-base font-semibold">{t("settings.usage")}</h2>
         <p className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">{generationCount} {t("settings.generations_month")}</p>
         <Button variant="outline" size="sm" onClick={async () => {
           await fetch("/api/auth/logout", { method: "POST" });
