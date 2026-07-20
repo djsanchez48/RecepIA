@@ -7,8 +7,6 @@ import { RecipeCard } from "@/components/recipes/RecipeCard";
 import { CollectionSheet } from "@/components/recipes/CollectionSheet";
 import { DraftCard } from "@/components/recipes/DraftCard";
 import { InlineRecipeEditor } from "@/components/recipes/InlineRecipeEditor";
-import { getSmartSuggestions } from "@/lib/suggestions";
-import type { Goal } from "@/lib/nutrition/targets";
 import { useI18n } from "@/lib/i18n-context";
 import type { GeneratedRecipe, ParsedRecipeResult } from "@/types/schemas";
 
@@ -38,10 +36,6 @@ export default function Home() {
   const [ocrLoading, setOcrLoading] = useState(false);
   const [editing, setEditing] = useState(false);
   const [profileHint, setProfileHint] = useState<{ type: string; value: string } | null>(null);
-  const [quickPrompts, setQuickPrompts] = useState<string[]>([
-    t("create.chip_quick_chicken"), t("create.chip_pasta"), t("create.chip_salad"),
-    t("create.chip_breakfast"), t("create.chip_soup"), t("create.chip_dessert"),
-  ]);
 
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -54,13 +48,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => { loadDrafts(); }, [loadDrafts]);
-  useEffect(() => {
-    fetch("/api/profile").then(r => r.json()).then(p => {
-      const goals = (p.goals ?? []) as Goal[];
-      const smart = getSmartSuggestions(goals);
-      if (smart.length > 0) setQuickPrompts(smart);
-    });
-  }, [t]);
 
   async function handleGenerate(e?: React.FormEvent) {
     if (e) e.preventDefault();
@@ -246,12 +233,6 @@ export default function Home() {
               onKeyDown={(e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); handleGenerate(); } }}
               placeholder={t("create.placeholder")}
               className="w-full min-h-24 rounded-xl border border-zinc-200 bg-white p-4 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:border-zinc-800 dark:bg-zinc-900 dark:placeholder:text-zinc-600" />
-            <div className="flex flex-wrap gap-2">
-              {quickPrompts.map((q) => (
-                <button key={q} type="button" onClick={() => setPrompt(q)}
-                  className="rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-600 hover:border-orange-300 hover:text-orange-600 dark:border-zinc-700 dark:text-zinc-400">{q}</button>
-              ))}
-            </div>
             <Button type="submit" disabled={loading || !prompt.trim()} className="w-full h-11">
               {loading ? <><Loader2 className="h-4 w-4 animate-spin" />{t("create.generating")}</> : <><Sparkles className="h-4 w-4" />{t("create.generate")}</>}
             </Button>

@@ -57,6 +57,8 @@ export default function MemoriaPage() {
   const [memoryEnabled, setMemoryEnabled] = useState(true);
   const [newIngredient, setNewIngredient] = useState("");
   const [loading, setLoading] = useState(true);
+  const [knowledge, setKnowledge] = useState("");
+  const [knowledgeSaved, setKnowledgeSaved] = useState<"idle" | "saving" | "saved">("idle");
 
   async function loadMemory() {
     const res = await fetch("/api/profile/memory");
@@ -65,6 +67,11 @@ export default function MemoriaPage() {
       setMemory((data.memoryProfile as MemoryProfile) ?? { ingredients: {}, tags: {}, badges: {} });
       setRecentEvents((data.recentEvents as RecentEvent[]) ?? []);
       setMemoryEnabled(data.memoryEnabled ?? true);
+    }
+    const kres = await fetch("/api/profile/knowledge");
+    if (kres.ok) {
+      const kdata = await kres.json();
+      setKnowledge(kdata.knowledgeProfile ?? "");
     }
     setLoading(false);
   }
@@ -116,6 +123,17 @@ export default function MemoriaPage() {
     await fetch("/api/profile/memory", { method: "DELETE" });
     setMemory({ ingredients: {}, tags: {}, badges: {} });
     setRecentEvents([]);
+  }
+
+  async function saveKnowledge() {
+    setKnowledgeSaved("saving");
+    await fetch("/api/profile/knowledge", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ knowledgeProfile: knowledge }),
+    });
+    setKnowledgeSaved("saved");
+    setTimeout(() => setKnowledgeSaved("idle"), 2000);
   }
 
   const sortedIngredients = Object.entries(memory.ingredients).sort((a, b) => b[1].score - a[1].score);
@@ -229,6 +247,27 @@ export default function MemoriaPage() {
           </div>
         </section>
       )}
+
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-sm font-semibold text-zinc-500 uppercase tracking-wide">Conocimiento contextual</h2>
+          {knowledgeSaved !== "idle" && (
+            <span className={`text-xs ${knowledgeSaved === "saving" ? "text-zinc-400" : "text-green-500"}`}>
+              {knowledgeSaved === "saving" ? "Guardando..." : "✓ Guardado"}
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+          Información sobre tus hábitos, entrenamiento y contexto que Fulse usa para adaptar las recetas. Pegá acá tu documento de conocimiento o escribí libremente.
+        </p>
+        <textarea
+          value={knowledge}
+          onChange={(e) => setKnowledge(e.target.value)}
+          onBlur={saveKnowledge}
+          placeholder="Ej: Hago CrossFit a las 5am, desayuno 7-8am. Días de descanso como algo más ligero. Prefiero recetas rápidas de noche..."
+          className="w-full min-h-48 rounded-xl border border-zinc-200 bg-white p-4 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:border-zinc-800 dark:bg-zinc-900 dark:placeholder:text-zinc-600 font-mono"
+        />
+      </section>
 
       <Button variant="outline" onClick={deleteAll} className="w-full text-red-600 border-red-200 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950">
         <Trash2 className="h-4 w-4 mr-2" />

@@ -92,6 +92,7 @@ model UserProfile {
   nudgeState            Json      @default("{}")
   memoryProfile         Json      @default("{}")
   memoryEnabled         Boolean   @default(true)
+  knowledgeProfile      String?
 }
 
 model GenerationDraft {

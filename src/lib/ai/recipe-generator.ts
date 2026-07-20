@@ -73,6 +73,7 @@ function buildSystemPrompt(
     defaultServings: number;
     goals?: string[];
     memoryProfile?: MemoryProfileData;
+    knowledgeProfile?: string | null;
   },
   lang: "es" | "en" = "es",
 ) {
@@ -90,6 +91,10 @@ function buildSystemPrompt(
   }
 
   prompt += buildMemoryBlock(profile.memoryProfile, lang);
+
+  if (profile.knowledgeProfile && profile.knowledgeProfile.trim().length > 0) {
+    prompt += `\n\nConocimiento del usuario (contexto valioso sobre sus hábitos, entrenamiento y preferencias):\n${profile.knowledgeProfile.trim()}\n\nUsá este conocimiento para adaptar las recetas al contexto del usuario (hora del día, si entrenó, ingredientes disponibles, etc.), pero no lo cites textualmente ni lo menciones explícitamente en la respuesta.`;
+  }
 
   prompt += "\n\nIncluye en tu JSON un campo 'nutrition' con { caloriesPerServing, proteinG, carbsG, fatG } estimados por porción, y un campo 'nutriBadges' con etiquetas del catálogo: [\"alta_proteina\", \"ligera\", \"buena_fibra\", \"dulce\", \"contundente\", \"alta_fibra\", \"baja_azucar\", \"alto_sodio\"].";
 
@@ -168,7 +173,7 @@ export async function generateRecipe(
   const systemMessage = {
     role: "system" as const,
     content: buildSystemPrompt(
-      { ...rawProfile, memoryProfile },
+      { ...rawProfile, memoryProfile, knowledgeProfile: profile?.knowledgeProfile },
     ),
   };
 
